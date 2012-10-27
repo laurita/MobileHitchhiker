@@ -1,0 +1,18 @@
+<resources>
+
+    <string name="app_name">MobileHitchhiker</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="create_trip">Create Trip</string>
+    <string name="find_trip">Find Trip</string>
+    <string name="title_activity_create_trip">CreateTripActivity</string>
+    <string name="title_activity_find_trip">FindTripActivity</string>
+    <string name="add_source">Add Source</string>
+    <string name="add_destination">Add Destination</string>
+    <string name="title_activity_add_source">AddSourceActivity</string>
+    <string name="title_activity_add_dest">AddDestActivity</string>
+	<string name="trip_start_time">Choose Trip Start Time</string>
+    <string name="trip_end_time">Choose Trip End Time</string>
+    
+</resources>
