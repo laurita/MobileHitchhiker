@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <TextView android:id="@+id/trip_map_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="10px" 
+		android:layout_marginBottom="5px"
+		style="@style/label" 
+		android:text="@string/trip_map_label" />
+    <com.google.android.maps.MapView
+                 android:layout_width="fill_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@id/trip_map_label"
+                 android:apiKey="0BG-XfqEYCBMALz74th2wGsD96s6a_V2-a4djdA"
+                 />
+
+</RelativeLayout>

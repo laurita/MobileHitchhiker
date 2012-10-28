@@ -1,5 +1,6 @@
 <resources>
 
+    <string name="menu_create_trip">Create trip</string>
     <string name="app_name">MobileHitchhiker</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
@@ -12,7 +13,16 @@
     <string name="add_destination">Add Destination</string>
     <string name="title_activity_add_source">AddSourceActivity</string>
     <string name="title_activity_add_dest">AddDestActivity</string>
-	<string name="trip_start_time">Choose Trip Start Time</string>
+    <string name="trip_start_time">Choose Trip Start Time</string>
     <string name="trip_end_time">Choose Trip End Time</string>
-    
+    <string name="intro_trip_info">Enter trip details</string>
+    <string name="start_location_label">Start location (City, Country):</string>
+    <string name="end_location_label">End location (City, Country):</string>
+    <string name="alert_label">Sorry!</string>
+    <string name="start_location_not_supplied_message">Start location must be specified \n(City, Country).</string>
+    <string name="end_location_not_supplied_message">End location must be specified \n(City, Country).</string>
+    <string name="create_trip_button_label">Create trip</string>
+    <string name="title_activity_trip_map">TripMap</string>
+    <string name="trip_map_label">Your trip</string>
+
 </resources>

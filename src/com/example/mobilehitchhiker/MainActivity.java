@@ -3,49 +3,62 @@ package com.example.mobilehitchhiker;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-//import android.view.Menu;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainActivity extends Activity {
-
+	
+	private static final String CLASSTAG = MainActivity.class
+			.getSimpleName();
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);
         
-        Button buttonCreate = (Button) this.findViewById(R.id.button01);
-        Button buttonFind = (Button) this.findViewById(R.id.button02);
+        Button buttonCreate = (Button) findViewById(R.id.button_create);
+        Button buttonFind = (Button) findViewById(R.id.button_find);
         
-        View.OnClickListener b1Listener = new myButtonListener(new CreateTripActivity());
-        View.OnClickListener b2Listener = new myButtonListener(new FindTripActivity());
-        
-        buttonCreate.setOnClickListener(b1Listener);
-        buttonFind.setOnClickListener(b2Listener);
+        buttonCreate.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleCreate();
+            }
+        });
+        buttonFind.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleFind();
+            }
+        });
     }
     
-    public class myButtonListener implements View.OnClickListener {
-    	
-    	Activity nextActivity;
-    	
-    	public myButtonListener(Activity act) {
-    		this.nextActivity = act;
-    	}
-    	
-		@Override
-		public void onClick(View v) {
-			Intent myIntent = new Intent(MainActivity.this, this.nextActivity.getClass());	    	
-	    	MainActivity.this.startActivity(myIntent);		
-		}
-    }
-
-    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-    */
+    
+    private void handleCreate() {
+		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " handleCreate");
+		
+		// call next Activity, CREATE
+		Intent intent = new Intent(Constants.INTENT_ACTION_CREATE);
+		startActivity(intent);
+	}
+
+    private void handleFind() {
+		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " handleFind");
+		
+		// call next Activity, FIND
+		Intent intent = new Intent(Constants.INTENT_ACTION_FIND);
+		startActivity(intent);
+	}
+    
+    
 }

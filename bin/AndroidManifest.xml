@@ -4,15 +4,24 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="15" />
+    
+    <uses-permission android:name="android.permission.INTERNET" /> 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
 
     <application
         android:icon="@drawable/ic_launcher"
+        android:name="MobileHitchhikerApplication"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <uses-library android:name="com.google.android.maps"/>
+        
         <activity
-            android:name=".MainActivity"
+            android:name="MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,37 +29,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
-            android:name=".CreateTripActivity"
+            android:name="CreateTripActivity"
             android:label="@string/title_activity_create_trip" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category
+					android:name="android.intent.category.DEFAULT" />
+				<action
+					android:name="com.example.mobilehitchhiker.CREATE" />
             </intent-filter>
         </activity>
+        
         <activity
-            android:name=".FindTripActivity"
+            android:name="FindTripActivity"
             android:label="@string/title_activity_find_trip" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="com.example.mobilehitchhiker.FIND" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
         <activity
-            android:name=".AddSourceActivity"
-            android:label="@string/title_activity_add_source" >
+            android:name="TripMap"
+            android:label="@string/title_activity_trip_map" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.google.android.maps.MapActivity" />
-        </activity>
-        <activity
-            android:name=".AddDestActivity"
-            android:label="@string/title_activity_add_dest" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.google.android.maps.MapActivity" />
+            <intent-filter>
+                <action android:name="com.example.mobilehitchhiker.SHOW_TRIP" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 

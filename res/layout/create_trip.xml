@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:gravity="center_horizontal" android:padding="10px"
+	>
+
+    <TextView android:id="@+id/intro_trip_info"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:layout_marginLeft="10px"
+		android:layout_marginBottom="15px" 
+		style="@style/intro"
+		android:text="@string/intro_trip_info" />
+    
+    <TextView android:id="@+id/start_location_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/intro_trip_info"
+		android:layout_marginLeft="10px" 
+		android:layout_marginBottom="5px"
+		style="@style/label" 
+		android:text="@string/start_location_label" />
+	<EditText android:id="@+id/start_location"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/start_location_label"
+		android:layout_marginLeft="10px" 
+		android:layout_marginBottom="5px"
+		style="@style/edit_text" />	
+		
+	<TextView android:id="@+id/end_location_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/start_location"
+		android:layout_marginLeft="10px" 
+		android:layout_marginBottom="5px"
+		style="@style/label" 
+		android:text="@string/end_location_label" />
+	<EditText android:id="@+id/end_location"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/end_location_label"
+		android:layout_marginLeft="10px" 
+		android:layout_marginBottom="5px"
+		style="@style/edit_text" />	
+		
+	<Button android:id="@+id/button_show"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"      
+        android:layout_marginLeft="10px" 
+        android:layout_marginBottom="5px"
+        android:layout_below="@id/end_location"
+        android:text="@string/create_trip_button_label" />
+
+</RelativeLayout>
