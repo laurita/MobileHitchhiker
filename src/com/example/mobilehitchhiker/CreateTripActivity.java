@@ -31,18 +31,20 @@ public class CreateTripActivity extends Activity {
 		setContentView(R.layout.create_trip);
 
 		buttonShow = (Button) findViewById(R.id.button_show);
-		
+
 		startLocation = (EditText) findViewById(R.id.start_location);
 		endLocation = (EditText) findViewById(R.id.end_location);
-					
-		Log.v(Constants.LOGTAG, " " + CreateTripActivity.CLASSTAG + " before setting OnClickListener");
+
+		Log.v(Constants.LOGTAG, " " + CreateTripActivity.CLASSTAG
+				+ " before setting OnClickListener");
 		buttonShow.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	Log.v(Constants.LOGTAG, " " + CreateTripActivity.CLASSTAG + " CreateTrip button clicked");
-                handleShowMap();
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				Log.v(Constants.LOGTAG, " " + CreateTripActivity.CLASSTAG
+						+ " CreateTrip button clicked");
+				handleShowMap();
+			}
+		});
 	}
 
 	@Override
@@ -71,8 +73,9 @@ public class CreateTripActivity extends Activity {
 	}
 
 	private void handleShowMap() {
-		Log.v(Constants.LOGTAG, " " + CreateTripActivity.CLASSTAG + " handleShowMap");
-		
+		Log.v(Constants.LOGTAG, " " + CreateTripActivity.CLASSTAG
+				+ " handleShowMap");
+
 		if ((startLocation.getText() == null)
 				|| startLocation.getText().toString().equals("")) {
 			new AlertDialog.Builder(this)
@@ -85,12 +88,11 @@ public class CreateTripActivity extends Activity {
 								public void onClick(DialogInterface dialog,
 										int which) {
 									// TODO Auto-generated method stub
-									
+
 								}
 							}).show();
 			return;
-		}
-		else if ((endLocation.getText() == null)
+		} else if ((endLocation.getText() == null)
 				|| endLocation.getText().toString().equals("")) {
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.alert_label)
@@ -102,18 +104,17 @@ public class CreateTripActivity extends Activity {
 								public void onClick(DialogInterface dialog,
 										int which) {
 									// TODO Auto-generated method stub
-									
+
 								}
 							}).show();
 			return;
 		}
-		
+
 		// use the "Application" to store global state (can go beyond primitives
 		// and Strings -
 		// beyond extras - if needed)
 		MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
-		application.setStartLocation(startLocation.getText()
-				.toString());
+		application.setStartLocation(startLocation.getText().toString());
 		application.setEndLocation(endLocation.getText().toString());
 
 		// call next Activity, CREATE_TRIP

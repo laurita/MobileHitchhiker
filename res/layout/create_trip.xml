@@ -51,6 +51,6 @@
         android:layout_marginLeft="10px" 
         android:layout_marginBottom="5px"
         android:layout_below="@id/end_location"
-        android:text="@string/create_trip_button_label" />
+        android:text="@string/create_trip" />
 
 </RelativeLayout>
