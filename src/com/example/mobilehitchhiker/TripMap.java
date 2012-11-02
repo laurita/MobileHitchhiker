@@ -1,5 +1,6 @@
 package com.example.mobilehitchhiker;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.google.android.maps.GeoPoint;
@@ -9,12 +10,17 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class TripMap extends MapActivity {
+	
+	private static final int MAX_ADDRESSES = 3;
+	Geocoder gc;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,17 @@ public class TripMap extends MapActivity {
         
 		String startLocation = application.getStartLocation();
 		String endLocation = application.getEndLocation();
+		
+		gc = new Geocoder(this);
+		
+		try {
+			List<Address> startList = gc.getFromLocationName(startLocation, MAX_ADDRESSES);
+			List<Address> endList = gc.getFromLocationName(endLocation, MAX_ADDRESSES);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 		
 		List<Overlay> mapOverlays = mapView.getOverlays();
 		Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
