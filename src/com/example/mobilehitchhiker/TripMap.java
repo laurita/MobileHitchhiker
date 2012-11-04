@@ -16,11 +16,14 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class TripMap extends MapActivity {
 	
 	private static final int MAX_ADDRESSES = 3;
 	Geocoder gc;
+	List<Address> startList;
+	List<Address> endList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,23 +41,27 @@ public class TripMap extends MapActivity {
 		gc = new Geocoder(this);
 		
 		try {
-			List<Address> startList = gc.getFromLocationName(startLocation, MAX_ADDRESSES);
-			List<Address> endList = gc.getFromLocationName(endLocation, MAX_ADDRESSES);
+			startList = gc.getFromLocationName(startLocation, MAX_ADDRESSES);
+			endList = gc.getFromLocationName(endLocation, MAX_ADDRESSES);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}		
 		
+		int startLat = (int) (startList.get(0).getLatitude() * 1E6);
+		int startLon = (int) (startList.get(0).getLongitude() * 1E6);
 		
+		int endLat = (int) (endList.get(0).getLatitude() * 1E6);
+		int endLon = (int) (endList.get(0).getLongitude() * 1E6);
 		
 		List<Overlay> mapOverlays = mapView.getOverlays();
 		Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
 		TripItemizedOverlay itemizedoverlay = new TripItemizedOverlay(drawable, this);
 		
-		GeoPoint point = new GeoPoint(19240000,-99120000);
-		OverlayItem overlayitem = new OverlayItem(point, "Hola, Mundo!", "I'm in Mexico City!");
+		GeoPoint startPoint = new GeoPoint(startLat, startLon);
+		OverlayItem overlayitem = new OverlayItem(startPoint, "Your trip starts here!", startLocation);
 		
-		GeoPoint point2 = new GeoPoint(35410000, 139460000);
-		OverlayItem overlayitem2 = new OverlayItem(point2, "Sekai, konichiwa!", "I'm in Japan!");
+		GeoPoint endPoint = new GeoPoint(endLat, endLon);
+		OverlayItem overlayitem2 = new OverlayItem(endPoint, "Your trip ends here!", endLocation);
 		
 		itemizedoverlay.addOverlay(overlayitem);
 		itemizedoverlay.addOverlay(overlayitem2);

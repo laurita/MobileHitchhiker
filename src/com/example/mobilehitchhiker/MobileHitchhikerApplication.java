@@ -10,7 +10,7 @@ public class MobileHitchhikerApplication  extends Application {
 	public MobileHitchhikerApplication() {
         super();
     }
-
+	
     @Override
     public void onCreate() {
         super.onCreate();
