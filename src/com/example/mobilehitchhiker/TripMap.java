@@ -77,8 +77,6 @@ public class TripMap extends MapActivity {
             }
             Address start = startList.get(0);
 
-            Log.d(Constants.LOGTAG, "Start Latitude : "+ start.getLatitude() + "Start Longitude : "+ start.getLongitude());
-
             Log.v(Constants.LOGTAG, "lat="+ start.getLatitude() + "&long="+ start.getLongitude());
 
             startLat = (int) (start.getLatitude()  * 1E6);
@@ -91,13 +89,11 @@ public class TripMap extends MapActivity {
         
         try 
         {
-            endList = coder.getFromLocationName(startLocation, MAX_ADDRESSES);
+            endList = coder.getFromLocationName(endLocation, MAX_ADDRESSES);
             if (endList == null) {
                 Log.d(Constants.LOGTAG, "############End not correct #########");
             }
             Address end = endList.get(0);
-
-            Log.d(Constants.LOGTAG, "End Latitude : "+ end.getLatitude() + "End Longitude : "+ end.getLongitude());
 
             Log.v(Constants.LOGTAG, "lat="+ end.getLatitude() + "&long="+ end.getLongitude());
             
