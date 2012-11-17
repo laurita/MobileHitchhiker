@@ -24,5 +24,6 @@
     <string name="end_location_not_supplied_message">End location must be specified \n(City, Country).</string>
     <string name="title_activity_trip_map">TripMap</string>
     <string name="trip_map_label">Your trip</string>
+    <string name="title_activity_location_update">LocationUpdateActivity</string>
 
 </resources>

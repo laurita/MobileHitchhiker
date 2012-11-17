@@ -56,6 +56,7 @@ public class MobileHitchhikerApplication extends Application {
 		trip3.setEnd(trip3endAddress);
 		trips.add(trip3);
 		
+		LocationUpdateActivity locationAct = new LocationUpdateActivity();
 		
 	}
 

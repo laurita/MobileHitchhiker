@@ -176,7 +176,7 @@ public class MainActivity extends Activity {
 			}
 			Address start = startList.get(0);
 			trip.setStart(start);
-			trip.setStart(start);
+			
 			Log.v(Constants.LOGTAG, "lat=" + start.getLatitude() + "&long="
 					+ start.getLongitude());
 		} catch (Exception e) {
@@ -191,7 +191,7 @@ public class MainActivity extends Activity {
 			}
 			Address end = endList.get(0);
 			trip.setEnd(end);
-			trip.setEnd(end);
+			
 			Log.v(Constants.LOGTAG,
 					"lat=" + end.getLatitude() + "&long=" + end.getLongitude());
 		} catch (Exception e) {
