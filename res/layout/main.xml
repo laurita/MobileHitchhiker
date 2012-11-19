@@ -13,14 +13,16 @@
 		style="@style/intro"
 		android:text="@string/intro_trip_info" />
     
-    <TextView android:id="@+id/start_location_label"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/intro_trip_info"
-		android:layout_marginLeft="10px" 
-		android:layout_marginBottom="5px"
-		style="@style/label" 
-		android:text="@string/start_location_label" />
+    <TextView
+        android:id="@+id/start_location_label"
+        style="@style/label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/intro_trip_info"
+        android:layout_marginBottom="5px"
+        android:layout_marginLeft="10px"
+        android:text="@string/start_location_label" />
+
 	<EditText android:id="@+id/start_location"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -29,36 +31,47 @@
 		android:layout_marginBottom="5px"
 		style="@style/edit_text" />	
 		
-	<TextView android:id="@+id/end_location_label"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/start_location"
-		android:layout_marginLeft="10px" 
-		android:layout_marginBottom="5px"
-		style="@style/label" 
-		android:text="@string/end_location_label" />
+	<TextView
+	    android:id="@+id/end_location_label"
+	    style="@style/label"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/start_location"
+	    android:layout_marginBottom="5px"
+	    android:layout_marginLeft="10px"
+	    android:text="@string/end_location_label" />
+
 	<EditText android:id="@+id/end_location"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/end_location_label"
 		android:layout_marginLeft="10px" 
 		android:layout_marginBottom="5px"
-		style="@style/edit_text" />	
-		
-	<Button android:id="@+id/button_show"  
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content"      
-        android:layout_marginLeft="10px" 
-        android:layout_marginBottom="5px"
-        android:layout_below="@id/end_location"
-        android:text="@string/create_trip" />
-	
-	<Button android:id="@+id/button_find"  
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content"      
-        android:layout_marginLeft="10px" 
-        android:layout_marginBottom="5px"
-        android:layout_below="@id/button_show"
-        android:text="@string/find_trip" />
+		style="@style/edit_text" />
 
+	<Button
+	    android:id="@+id/button_find"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/end_location"
+	    android:layout_toRightOf="@+id/intro_trip_info"
+	    android:text="@string/find_trip" />
+
+	<Button
+	    android:id="@+id/button_show"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignRight="@+id/intro_trip_info"
+	    android:layout_below="@+id/end_location"
+	    android:text="@string/create_trip" />
+
+	<CheckBox
+	    android:id="@+id/checkBoxStart"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/button_find"
+	    android:layout_alignParentTop="true"
+	    android:checked="false"
+	    android:text="@string/start_here_checkbox"
+	    style="@style/checkbox" />
 </RelativeLayout>

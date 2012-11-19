@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,14 +29,17 @@ public class MainActivity extends Activity {
 	private EditText endLocation;
 	private Button buttonShow;
 	private Button buttonFind;
+	private CheckBox startCheckBox;
+	private MobileHitchhikerApplication.Trip trip;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " onCreate");
 
-		
 		setContentView(R.layout.main);
+
+		startCheckBox = (CheckBox) findViewById(R.id.checkBoxStart);
 
 		buttonShow = (Button) findViewById(R.id.button_show);
 		buttonFind = (Button) findViewById(R.id.button_find);
@@ -50,6 +54,8 @@ public class MainActivity extends Activity {
 				application.setAim(MobileHitchhikerApplication.TO_CREATE);
 				Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
 						+ " CreateTrip button clicked");
+				Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
+						+ " Aim is : " + application.getAim());
 				handleShowMap(application.getAim());
 			}
 		});
@@ -84,7 +90,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		
+
 		MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
 		switch (item.getItemId()) {
 		case MENU_CREATE_TRIP:
@@ -107,8 +113,10 @@ public class MainActivity extends Activity {
 		
 		MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
 		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " handleShowMap");
+		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
+				+ " Aim is : " + application.getAim());
 
-		if ((startLocation.getText() == null)
+		if (!startCheckBox.isChecked() && (startLocation.getText() == null)
 				|| startLocation.getText().toString().equals("")) {
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.alert_label)
@@ -144,15 +152,23 @@ public class MainActivity extends Activity {
 		String startLocationString = startLocation.getText().toString();
 		String endLocationString = endLocation.getText().toString();
 
-		MobileHitchhikerApplication.Trip trip = application.new Trip(
-				startLocationString, endLocationString);
-		addTripAddresses(trip);
+		if (startCheckBox.isChecked()) {
+			//TODO: start address should be passed as pair of coordinates.
+			//TODO: How to create Address having lat and lon ???????
+			double startLatitude = application.locationAct.latitude[application.locationAct.latitude.length];
+			double startLongitude = application.locationAct.longitude[application.locationAct.longitude.length];
+			trip = application.new Trip(
+					getAddressFromLocation(startLatitude, startLongitude), getAddressFromString(endLocationString));
+		} else {
+			trip = application.new Trip(
+					getAddressFromString(startLocationString), getAddressFromString(endLocationString));
+		}
+		
 		application.setTrip(trip);
-
-		switch (application.getAim()) {
-		case MobileHitchhikerApplication.TO_CREATE:
+		
+		if (application.getAim() == MobileHitchhikerApplication.TO_CREATE) {
 			application.addTripToTripList(trip);
-		case MobileHitchhikerApplication.TO_FIND:
+		} else {
 			MobileHitchhikerApplication.Trip foundTrip = application
 					.findBestTrip(trip);
 			application.setFoundTrip(foundTrip);
@@ -162,42 +178,71 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 
-	public void addTripAddresses(Trip trip) {
+	public Address getAddressFromString(String str) {
 		Geocoder coder = new Geocoder(this);
-		List<Address> startList;
-		List<Address> endList;
+		List<Address> addressList;
+		Address address = null;
 
 		try {
-			startList = coder.getFromLocationName(trip.getStartLocation(),
-					MAX_ADDRESSES);
-			if (startList == null) {
+			addressList = coder.getFromLocationName(str, MAX_ADDRESSES);
+			if (addressList == null) {
 				Log.d(Constants.LOGTAG,
-						"############Start not correct #########");
+						"############Address not correct #########");
 			}
-			Address start = startList.get(0);
-			trip.setStart(start);
-			
-			Log.v(Constants.LOGTAG, "lat=" + start.getLatitude() + "&long="
-					+ start.getLongitude());
+			address = addressList.get(0);
+
+			Log.v(Constants.LOGTAG, "lat=" + address.getLatitude() + "&long="
+					+ address.getLongitude());
 		} catch (Exception e) {
-			Log.d(Constants.LOGTAG, "MY_ERROR : ############Start Not Found");
+			Log.d(Constants.LOGTAG, "MY_ERROR : ############Address Not Found");
 		}
 
-		try {
-			endList = coder.getFromLocationName(trip.getEndLocation(),
-					MAX_ADDRESSES);
-			if (endList == null) {
-				Log.d(Constants.LOGTAG, "############End not correct #########");
-			}
-			Address end = endList.get(0);
-			trip.setEnd(end);
-			
-			Log.v(Constants.LOGTAG,
-					"lat=" + end.getLatitude() + "&long=" + end.getLongitude());
-		} catch (Exception e) {
-			Log.d(Constants.LOGTAG, "MY_ERROR : ############End Not Found");
-		}
-
+		return address;
 	}
 
+	public Address getAddressFromLocation(double latitude, double longitude) {
+		Geocoder coder = new Geocoder(this);
+		List<Address> addressList;
+		Address address = null;
+
+		try {
+			addressList = coder.getFromLocation(latitude, longitude,
+					MAX_ADDRESSES);
+			if (addressList == null) {
+				Log.d(Constants.LOGTAG,
+						"############Address not correct #########");
+			}
+			address = addressList.get(0);
+
+			Log.v(Constants.LOGTAG, "lat=" + address.getLatitude() + "&long="
+					+ address.getLongitude());
+		} catch (Exception e) {
+			Log.d(Constants.LOGTAG, "MY_ERROR : ############Address Not Found");
+		}
+
+		return address;
+	}
+
+	/*
+	 * public void addTripAddresses(Trip trip) { Geocoder coder = new
+	 * Geocoder(this); List<Address> startList; List<Address> endList;
+	 * 
+	 * try { startList = coder.getFromLocationName(trip.getStartLocation(),
+	 * MAX_ADDRESSES); if (startList == null) { Log.d(Constants.LOGTAG,
+	 * "############Start not correct #########"); } Address start =
+	 * startList.get(0); trip.setStart(start);
+	 * 
+	 * Log.v(Constants.LOGTAG, "lat=" + start.getLatitude() + "&long=" +
+	 * start.getLongitude()); } catch (Exception e) { Log.d(Constants.LOGTAG,
+	 * "MY_ERROR : ############Start Not Found"); }
+	 * 
+	 * try { endList = coder.getFromLocationName(trip.getEndLocation(),
+	 * MAX_ADDRESSES); if (endList == null) { Log.d(Constants.LOGTAG,
+	 * "############End not correct #########"); } Address end = endList.get(0);
+	 * trip.setEnd(end);
+	 * 
+	 * Log.v(Constants.LOGTAG, "lat=" + end.getLatitude() + "&long=" +
+	 * end.getLongitude()); } catch (Exception e) { Log.d(Constants.LOGTAG,
+	 * "MY_ERROR : ############End Not Found"); } }
+	 */
 }

@@ -16,16 +16,17 @@ public final class R {
         public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int button_find=0x7f070006;
-        public static final int button_show=0x7f070005;
+        public static final int button_find=0x7f070005;
+        public static final int button_show=0x7f070006;
+        public static final int checkBoxStart=0x7f070007;
         public static final int end_location=0x7f070004;
         public static final int end_location_label=0x7f070003;
         public static final int intro_trip_info=0x7f070000;
-        public static final int mapview=0x7f070008;
-        public static final int menu_settings=0x7f070009;
+        public static final int mapview=0x7f070009;
+        public static final int menu_settings=0x7f07000a;
         public static final int start_location=0x7f070002;
         public static final int start_location_label=0x7f070001;
-        public static final int trip_map_label=0x7f070007;
+        public static final int trip_map_label=0x7f070008;
     }
     public static final class layout {
         public static final int activity_add_dest=0x7f030000;
@@ -57,6 +58,7 @@ public final class R {
         public static final int menu_create_trip=0x7f040000;
         public static final int menu_find_trip=0x7f040001;
         public static final int menu_settings=0x7f040004;
+        public static final int start_here_checkbox=0x7f040019;
         public static final int start_location_label=0x7f040011;
         public static final int start_location_not_supplied_message=0x7f040014;
         public static final int title_activity_add_dest=0x7f04000d;
@@ -72,7 +74,8 @@ public final class R {
     }
     public static final class style {
         public static final int AppTheme=0x7f050000;
-        public static final int edit_text=0x7f050003;
+        public static final int checkbox=0x7f050003;
+        public static final int edit_text=0x7f050004;
         public static final int intro=0x7f050001;
         public static final int label=0x7f050002;
     }

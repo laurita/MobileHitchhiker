@@ -12,6 +12,8 @@ public class LocationUpdateActivity extends Activity
 {
 	LocationManager locMgr = null;
 	LocationListener locListener = null;
+	double[] latitude;
+	double[] longitude;
 	
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -26,6 +28,8 @@ public class LocationUpdateActivity extends Activity
             {
                 if (location != null)
                 {
+                	latitude[latitude.length] = location.getLatitude();
+                	longitude[longitude.length] = location.getLongitude();
                     Toast.makeText(getBaseContext(),
                         "New location latitude [" + 
                         location.getLatitude() +

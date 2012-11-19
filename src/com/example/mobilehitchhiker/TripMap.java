@@ -7,6 +7,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -51,24 +52,31 @@ public class TripMap extends MapActivity {
 
 		// By default the start/end locations are initialized to the trip with
 		// info that was filled in in the form
-		String startLocation = app.getTrip().getStartLocation();
-		String endLocation = app.getTrip().getEndLocation();
+		//String startLocation = app.getTrip().getStartLocation();
+		//String endLocation = app.getTrip().getEndLocation();
 
+		Address start = null; 
+		Address end = null;
+		String startAddress;
+		String endAddress;
+		
 		Log.v(Constants.LOGTAG, " " + TripMap.CLASSTAG + " displayMapWithTrip");
 
-		switch (app.getAim()) {
-		case MobileHitchhikerApplication.TO_CREATE:
-			startLocation = app.getTrip().getStartLocation();
-			endLocation = app.getTrip().getEndLocation();
-		case MobileHitchhikerApplication.TO_FIND:
-			startLocation = app.getFoundTrip().getStartLocation();
-			endLocation = app.getFoundTrip().getEndLocation();
-		}
+		if (app.getAim() == MobileHitchhikerApplication.TO_CREATE) {
+			start = app.getTrip().getStart();
+			end = app.getTrip().getEnd();
+		} else {
+			start = app.getFoundTrip().getStart();
+			end = app.getFoundTrip().getEnd();
+		}			
 
+		startAddress = start.getAddressLine(0);
+		endAddress = end.getAddressLine(0);
+		
 		Log.v(Constants.LOGTAG, " " + TripMap.CLASSTAG + " start location is "
-				+ startLocation);
+				+ startAddress);
 		Log.v(Constants.LOGTAG, " " + TripMap.CLASSTAG + " end location is "
-				+ endLocation);
+				+ endAddress);
 
 		List<Overlay> mapOverlays = mapView.getOverlays();
 		Drawable drawable = this.getResources().getDrawable(
@@ -81,14 +89,14 @@ public class TripMap extends MapActivity {
 
 		GeoPoint startPoint = new GeoPoint(startLat, startLon);
 		OverlayItem overlayitem = new OverlayItem(startPoint,
-				"Your trip starts here!", startLocation);
+				"Your trip starts here!", startAddress);
 
 		int endLat = (int) (trip.getEnd().getLatitude() * 1E6);
 		int endLon = (int) (trip.getEnd().getLongitude() * 1E6);
 
 		GeoPoint endPoint = new GeoPoint(endLat, endLon);
 		OverlayItem overlayitem2 = new OverlayItem(endPoint,
-				"Your trip ends here!", endLocation);
+				"Your trip ends here!", endAddress);
 
 		itemizedoverlay.addOverlay(overlayitem);
 		itemizedoverlay.addOverlay(overlayitem2);
