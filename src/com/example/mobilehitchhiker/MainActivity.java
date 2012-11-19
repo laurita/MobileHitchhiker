@@ -1,7 +1,6 @@
 package com.example.mobilehitchhiker;
 
 import java.util.List;
-import com.example.mobilehitchhiker.MobileHitchhikerApplication.Trip;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -31,12 +30,16 @@ public class MainActivity extends Activity {
 	private Button buttonFind;
 	private CheckBox startCheckBox;
 	private MobileHitchhikerApplication.Trip trip;
+	public LocationUpdate locUpdate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " onCreate");
 
+		locUpdate = new LocationUpdate(this);
+		locUpdate.start();
+		
 		setContentView(R.layout.main);
 
 		startCheckBox = (CheckBox) findViewById(R.id.checkBoxStart);
@@ -115,7 +118,7 @@ public class MainActivity extends Activity {
 		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " handleShowMap");
 		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
 				+ " Aim is : " + application.getAim());
-
+		
 		if (!startCheckBox.isChecked() && (startLocation.getText() == null)
 				|| startLocation.getText().toString().equals("")) {
 			new AlertDialog.Builder(this)
@@ -155,8 +158,11 @@ public class MainActivity extends Activity {
 		if (startCheckBox.isChecked()) {
 			//TODO: start address should be passed as pair of coordinates.
 			//TODO: How to create Address having lat and lon ???????
-			double startLatitude = application.locationAct.latitude[application.locationAct.latitude.length];
-			double startLongitude = application.locationAct.longitude[application.locationAct.longitude.length];
+			//double startLatitude = application.locationAct.latitude[application.locationAct.latitude.length];
+			//double startLongitude = application.locationAct.longitude[application.locationAct.longitude.length];
+			double startLatitude = locUpdate.latitude[0];
+			double startLongitude = locUpdate.longitude[0];
+			
 			trip = application.new Trip(
 					getAddressFromLocation(startLatitude, startLongitude), getAddressFromString(endLocationString));
 		} else {
@@ -222,27 +228,4 @@ public class MainActivity extends Activity {
 
 		return address;
 	}
-
-	/*
-	 * public void addTripAddresses(Trip trip) { Geocoder coder = new
-	 * Geocoder(this); List<Address> startList; List<Address> endList;
-	 * 
-	 * try { startList = coder.getFromLocationName(trip.getStartLocation(),
-	 * MAX_ADDRESSES); if (startList == null) { Log.d(Constants.LOGTAG,
-	 * "############Start not correct #########"); } Address start =
-	 * startList.get(0); trip.setStart(start);
-	 * 
-	 * Log.v(Constants.LOGTAG, "lat=" + start.getLatitude() + "&long=" +
-	 * start.getLongitude()); } catch (Exception e) { Log.d(Constants.LOGTAG,
-	 * "MY_ERROR : ############Start Not Found"); }
-	 * 
-	 * try { endList = coder.getFromLocationName(trip.getEndLocation(),
-	 * MAX_ADDRESSES); if (endList == null) { Log.d(Constants.LOGTAG,
-	 * "############End not correct #########"); } Address end = endList.get(0);
-	 * trip.setEnd(end);
-	 * 
-	 * Log.v(Constants.LOGTAG, "lat=" + end.getLatitude() + "&long=" +
-	 * end.getLongitude()); } catch (Exception e) { Log.d(Constants.LOGTAG,
-	 * "MY_ERROR : ############End Not Found"); } }
-	 */
 }

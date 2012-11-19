@@ -19,6 +19,7 @@ public class MobileHitchhikerApplication extends Application {
 	public static final int TO_FIND = 2;
 	public static final float MAX_DIST = 500000; // distance in meters
 	public LocationUpdateActivity locationAct;
+	
 
 	public MobileHitchhikerApplication() {
 		super();
@@ -57,8 +58,7 @@ public class MobileHitchhikerApplication extends Application {
 		trip3.setEnd(trip3endAddress);
 		trips.add(trip3);
 		
-		locationAct = new LocationUpdateActivity();
-		
+		//locationAct = new LocationUpdateActivity();
 	}
 
 	@Override
@@ -172,15 +172,6 @@ public class MobileHitchhikerApplication extends Application {
 					+ " , end location: " + this.end.getAddressLine(0);
 		}
 
-		/*
-		public String getStartLocation() {
-			return this.startLocation;
-		}
-
-		public void setStartLocation(String startLocation) {
-			this.startLocation = startLocation;
-		}
-		*/
 		public Address getStart() {
 			return this.start;
 		}
@@ -188,15 +179,6 @@ public class MobileHitchhikerApplication extends Application {
 		public void setStart(Address start) {
 			this.start = start;
 		}
-		/*
-		public String getEndLocation() {
-			return this.endLocation;
-		}
-
-		public void setEndLocation(String endLocation) {
-			this.endLocation = endLocation;
-		}
-		*/
 		public Address getEnd() {
 			return this.end;
 		}
