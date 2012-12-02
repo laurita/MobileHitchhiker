@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
 
 		locUpdate = new LocationUpdate(this);
 		locUpdate.start();
-		
+
 		setContentView(R.layout.main);
 
 		startCheckBox = (CheckBox) findViewById(R.id.checkBoxStart);
@@ -95,6 +95,7 @@ public class MainActivity extends Activity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
 		MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
+		// FIXME
 		switch (item.getItemId()) {
 		case MENU_CREATE_TRIP:
 			application.setAim(MobileHitchhikerApplication.TO_CREATE);
@@ -113,12 +114,12 @@ public class MainActivity extends Activity {
 	}
 
 	private void handleShowMap(int aim) {
-		
+
 		MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
 		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " handleShowMap");
-		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
-				+ " Aim is : " + application.getAim());
-		
+		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " Aim is : "
+				+ application.getAim());
+
 		if (!startCheckBox.isChecked() && (startLocation.getText() == null)
 				|| startLocation.getText().toString().equals("")) {
 			new AlertDialog.Builder(this)
@@ -154,37 +155,59 @@ public class MainActivity extends Activity {
 
 		String startLocationString = startLocation.getText().toString();
 		String endLocationString = endLocation.getText().toString();
+		try {
+			if (startCheckBox.isChecked()) {
+				// TODO: start address should be passed as pair of coordinates.
+				// TODO: How to create Address having lat and lon ???????
+				// double startLatitude =
+				// application.locationAct.latitude[application.locationAct.latitude.length];
+				// double startLongitude =
+				// application.locationAct.longitude[application.locationAct.longitude.length];
+				double startLatitude = locUpdate.latitude[0];
+				double startLongitude = locUpdate.longitude[0];
 
-		if (startCheckBox.isChecked()) {
-			//TODO: start address should be passed as pair of coordinates.
-			//TODO: How to create Address having lat and lon ???????
-			//double startLatitude = application.locationAct.latitude[application.locationAct.latitude.length];
-			//double startLongitude = application.locationAct.longitude[application.locationAct.longitude.length];
-			double startLatitude = locUpdate.latitude[0];
-			double startLongitude = locUpdate.longitude[0];
-			
-			trip = application.new Trip(
-					getAddressFromLocation(startLatitude, startLongitude), getAddressFromString(endLocationString));
-		} else {
-			trip = application.new Trip(
-					getAddressFromString(startLocationString), getAddressFromString(endLocationString));
+				trip = application.new Trip(getAddressFromLocation(
+						startLatitude, startLongitude),
+						getAddressFromString(endLocationString));
+			} else {
+				// FIXME pop up
+				trip = application.new Trip(
+						getAddressFromString(startLocationString),
+						getAddressFromString(endLocationString));
+			}
+
+			application.setTrip(trip);
+
+			if (application.getAim() == MobileHitchhikerApplication.TO_CREATE) {
+				application.addTripToTripList(trip);
+			} else {
+				MobileHitchhikerApplication.Trip foundTrip = application
+						.findBestTrip(trip);
+				application.setFoundTrip(foundTrip);
+			}
+
+			Intent intent = new Intent(Constants.INTENT_ACTION_SHOW_TRIP);
+			startActivity(intent);
+		} catch (InvalidAddressException e) {
+			Log.d(Constants.LOGTAG, "Cia bus sesko popupas");
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.alert_label)
+					.setMessage(R.string.location_not_resolved_message)
+					.setPositiveButton(
+							"Continue",
+							new android.content.DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method stub
+								}
+							}).show();
+			return;
 		}
-		
-		application.setTrip(trip);
-		
-		if (application.getAim() == MobileHitchhikerApplication.TO_CREATE) {
-			application.addTripToTripList(trip);
-		} else {
-			MobileHitchhikerApplication.Trip foundTrip = application
-					.findBestTrip(trip);
-			application.setFoundTrip(foundTrip);
-		}
-		
-		Intent intent = new Intent(Constants.INTENT_ACTION_SHOW_TRIP);
-		startActivity(intent);
 	}
 
-	public Address getAddressFromString(String str) {
+	public Address getAddressFromString(String str)
+			throws InvalidAddressException {
 		Geocoder coder = new Geocoder(this);
 		List<Address> addressList;
 		Address address = null;
@@ -201,6 +224,8 @@ public class MainActivity extends Activity {
 					+ address.getLongitude());
 		} catch (Exception e) {
 			Log.d(Constants.LOGTAG, "MY_ERROR : ############Address Not Found");
+			throw new InvalidAddressException(str);
+			// FIXME: pop up "address not found" and go back
 		}
 
 		return address;
@@ -227,5 +252,15 @@ public class MainActivity extends Activity {
 		}
 
 		return address;
+	}
+}
+
+class InvalidAddressException extends Exception {
+
+	void InvaidAddressException() {
+	}
+
+	InvalidAddressException(String strMessage) {
+		super(strMessage);
 	}
 }
