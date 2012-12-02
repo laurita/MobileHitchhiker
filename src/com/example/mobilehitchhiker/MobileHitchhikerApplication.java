@@ -18,9 +18,8 @@ public class MobileHitchhikerApplication extends Application {
 	public static final int TO_CREATE = 1;
 	public static final int TO_FIND = 2;
 	public static final float MAX_DIST = 500000; // distance in meters
-	public LocationUpdateActivity locationAct;
-	
 
+	
 	public MobileHitchhikerApplication() {
 		super();
 		this.trips = new ArrayList<Trip>();

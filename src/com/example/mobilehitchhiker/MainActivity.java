@@ -30,15 +30,13 @@ public class MainActivity extends Activity {
 	private Button buttonFind;
 	private CheckBox startCheckBox;
 	private MobileHitchhikerApplication.Trip trip;
-	public LocationUpdate locUpdate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " onCreate");
 
-		locUpdate = new LocationUpdate(this);
-		locUpdate.start();
+		
 
 		setContentView(R.layout.main);
 
@@ -120,8 +118,8 @@ public class MainActivity extends Activity {
 		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " Aim is : "
 				+ application.getAim());
 
-		if (!startCheckBox.isChecked() && (startLocation.getText() == null)
-				|| startLocation.getText().toString().equals("")) {
+		if (!startCheckBox.isChecked() && (startLocation.getText() == null
+				|| startLocation.getText().toString().equals(""))) {
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.alert_label)
 					.setMessage(R.string.start_location_not_supplied_message)
@@ -157,18 +155,20 @@ public class MainActivity extends Activity {
 		String endLocationString = endLocation.getText().toString();
 		try {
 			if (startCheckBox.isChecked()) {
-				// TODO: start address should be passed as pair of coordinates.
-				// TODO: How to create Address having lat and lon ???????
-				// double startLatitude =
-				// application.locationAct.latitude[application.locationAct.latitude.length];
-				// double startLongitude =
-				// application.locationAct.longitude[application.locationAct.longitude.length];
-				double startLatitude = locUpdate.latitude[0];
-				double startLongitude = locUpdate.longitude[0];
+				  LocationService gps = new LocationService(MainActivity.this);
+				  
+		          if(gps.isGPSEnabled()){
+		              double latitude = gps.getLatitude();
+		              double longitude = gps.getLongitude();
 
-				trip = application.new Trip(getAddressFromLocation(
-						startLatitude, startLongitude),
-						getAddressFromString(endLocationString));
+		              trip = application.new Trip(getAddressFromLocation(
+								latitude, longitude),
+								getAddressFromString(endLocationString));
+		          } else {
+		              gps.showSettingsAlert();
+		          }
+
+				
 			} else {
 				// FIXME pop up
 				trip = application.new Trip(
