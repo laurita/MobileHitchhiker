@@ -1,7 +1,19 @@
 package com.example.mobilehitchhiker;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import android.app.Application;
 import android.location.Address;
@@ -10,7 +22,8 @@ import android.util.Log;
 
 public class MobileHitchhikerApplication extends Application {
 
-	private static final String CLASSTAG = MobileHitchhikerApplication.class.getSimpleName();
+	private static final String CLASSTAG = MobileHitchhikerApplication.class
+			.getSimpleName();
 	private ArrayList<Trip> trips;
 	private Trip trip;
 	private int aim;
@@ -19,7 +32,6 @@ public class MobileHitchhikerApplication extends Application {
 	public static final int TO_FIND = 2;
 	public static final float MAX_DIST = 500000; // distance in meters
 
-	
 	public MobileHitchhikerApplication() {
 		super();
 		this.trips = new ArrayList<Trip>();
@@ -34,7 +46,7 @@ public class MobileHitchhikerApplication extends Application {
 		trip1.setStart(trip1startAddress);
 		trip1.setEnd(trip1endAddress);
 		trips.add(trip1);
-		
+
 		Trip trip2 = new Trip("Laives, Italy", "Trento, Italy");
 		Address trip2startAddress = new Address(Locale.ITALY);
 		Address trip2endAddress = new Address(Locale.ITALY);
@@ -45,7 +57,7 @@ public class MobileHitchhikerApplication extends Application {
 		trip2.setStart(trip2startAddress);
 		trip2.setEnd(trip2endAddress);
 		trips.add(trip2);
-		
+
 		Trip trip3 = new Trip("Bolzano, Italy", "Rovereto");
 		Address trip3startAddress = new Address(Locale.ITALY);
 		Address trip3endAddress = new Address(Locale.ITALY);
@@ -56,8 +68,8 @@ public class MobileHitchhikerApplication extends Application {
 		trip3.setStart(trip3startAddress);
 		trip3.setEnd(trip3endAddress);
 		trips.add(trip3);
-		
-		//locationAct = new LocationUpdateActivity();
+
+		// locationAct = new LocationUpdateActivity();
 	}
 
 	@Override
@@ -94,38 +106,91 @@ public class MobileHitchhikerApplication extends Application {
 		this.foundTrip = trip;
 	}
 
-	public Trip findBestTrip(Trip trip) {
-		Log.v(Constants.LOGTAG, " " + MobileHitchhikerApplication.CLASSTAG + " findBestTrip");
+	public Trip findBest(double lat, double lon) {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/journeys?lat="+Double.toString(lat) + "&long=" + Double.toString(lon));
+		HttpResponse response;
+
+		try {
+			response = httpClient.execute(httpGet);
+			HttpEntity entity = response.getEntity();
+
+			InputStream instream = entity.getContent();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					instream));
+
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+
+			String result = sb.toString();
+
+			JSONArray json = (JSONArray) new JSONParser().parse(result);
+			JSONObject o = (JSONObject) json.get(0);
+			Trip trip = new Trip((String) o.get("start"), (String) o.get("end"));
+			
+			Address tripstartAddress = new Address(Locale.ITALY);
+			Address tripendAddress = new Address(Locale.ITALY);
+			
 		
-		Address start = trip.getStart();	
+			tripstartAddress.setLatitude((Double) o.get("start_lat"));
+			tripstartAddress.setLongitude((Double) o.get("start_long"));
+			tripendAddress.setLatitude((Double) o.get("end_lat"));
+			tripendAddress.setLongitude((Double) o.get("end_long"));
+			trip.setStart(tripstartAddress);
+			trip.setEnd(tripendAddress);
+							
+			
+			instream.close();
+			
+			return trip;
+			
+		} catch (Exception e) {
+			return new Trip("foo", "bar");
+		}
+
+	}
+
+	public Trip findBestTrip(Trip trip) {
+		Log.v(Constants.LOGTAG, " " + MobileHitchhikerApplication.CLASSTAG
+				+ " findBestTrip");
+
+		Address start = trip.getStart();
 		Address end = trip.getEnd();
-	
+
 		double startLat = start.getLatitude();
 		double startLon = start.getLongitude();
 		double endLat = end.getLatitude();
 		double endLon = end.getLongitude();
 		float minDist = MAX_DIST;
 		// Initialize foundTrip to the first one. Might cause problems later !!!
-		Trip foundTrip = trips.get(0);
-		
+		return findBest(startLat, startLon);
+		/*Trip foundTrip = trips.get(0);
+
 		for (int i = 0; i < trips.size(); i++) {
-			
+
 			double startLatx = trips.get(i).getStart().getLatitude();
 			double startLonx = trips.get(i).getStart().getLongitude();
 			double endLatx = trips.get(i).getEnd().getLatitude();
 			double endLonx = trips.get(i).getEnd().getLongitude();
-			float startDistance = distance(startLat, startLon, startLatx, startLonx);
+			float startDistance = distance(startLat, startLon, startLatx,
+					startLonx);
 			float endDistance = distance(endLat, endLon, endLatx, endLonx);
 			float distance = startDistance + endDistance;
-			Log.v(Constants.LOGTAG, " " + MobileHitchhikerApplication.CLASSTAG + i + ": " + distance);
+			Log.v(Constants.LOGTAG, " " + MobileHitchhikerApplication.CLASSTAG
+					+ i + ": " + distance);
 			if (distance < minDist) {
 				minDist = distance;
 				foundTrip = trips.get(i);
 			}
 		}
 		return foundTrip;
+		*/
 	}
-	
+
 	private float distance(double latA, double lonA, double latB, double lonB) {
 		Location locationA = new Location("passenger trip start");
 
@@ -160,6 +225,7 @@ public class MobileHitchhikerApplication extends Application {
 			this.end = end;
 		}
 		
+
 		public Trip(String start, String end) {
 			this.startLocation = start;
 			this.endLocation = end;
@@ -178,6 +244,7 @@ public class MobileHitchhikerApplication extends Application {
 		public void setStart(Address start) {
 			this.start = start;
 		}
+
 		public Address getEnd() {
 			return this.end;
 		}
@@ -187,5 +254,3 @@ public class MobileHitchhikerApplication extends Application {
 		}
 	}
 }
-
-
