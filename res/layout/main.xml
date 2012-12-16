@@ -54,24 +54,38 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/end_location"
-	    android:layout_toRightOf="@+id/intro_trip_info"
+	    android:layout_marginTop="51dp"
+	    android:layout_toRightOf="@+id/button_show"
 	    android:text="@string/find_trip" />
 
 	<Button
 	    android:id="@+id/button_show"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignRight="@+id/intro_trip_info"
-	    android:layout_below="@+id/end_location"
+	    android:layout_alignBaseline="@+id/button_find"
+	    android:layout_alignBottom="@+id/button_find"
+	    android:layout_alignLeft="@+id/end_location"
+	    android:layout_marginLeft="16dp"
 	    android:text="@string/create_trip" />
+
+	<Button
+	    android:id="@+id/button_date"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/end_location"
+	    android:onClick="showDatePickerDialog"
+	    android:text="@string/pick_date" />
 
 	<CheckBox
 	    android:id="@+id/checkBoxStart"
+	    style="@style/checkbox"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/button_find"
-	    android:layout_alignParentTop="true"
+	    android:layout_alignTop="@+id/intro_trip_info"
+	    android:layout_marginLeft="18dp"
+	    android:layout_toRightOf="@+id/intro_trip_info"
 	    android:checked="false"
-	    android:text="@string/start_here_checkbox"
-	    style="@style/checkbox" />
+	    android:text="@string/start_here_checkbox" />
+
 </RelativeLayout>

@@ -1,42 +1,34 @@
 package com.example.mobilehitchhiker;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
+import java.util.Calendar;
+import java.util.List;
 
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.Editable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.app.DatePickerDialog;
 
 import android.view.Menu;
 import android.view.View.OnClickListener;
 
-@TargetApi(9)
+@TargetApi(11)
 public class MainActivity extends Activity {
 
 	private static final String CLASSTAG = MainActivity.class.getSimpleName();
@@ -49,14 +41,16 @@ public class MainActivity extends Activity {
 	private Button buttonFind;
 	private CheckBox startCheckBox;
 	private MobileHitchhikerApplication.Trip trip;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
+		
 		super.onCreate(savedInstanceState);
-		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " onCreate");
+		
+		Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG + " onCreate");
 
 		setContentView(R.layout.main);
 
@@ -73,9 +67,9 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
 				application.setAim(MobileHitchhikerApplication.TO_CREATE);
-				Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
+				Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG
 						+ " CreateTrip button clicked");
-				Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
+				Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG
 						+ " Aim is : " + application.getAim());
 				handleShowMap(application.getAim());
 			}
@@ -86,7 +80,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
 				application.setAim(MobileHitchhikerApplication.TO_FIND);
-				Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
+				Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG
 						+ " FindTrip button clicked");
 				handleShowMap(application.getAim());
 			}
@@ -97,7 +91,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " onResume");
+		Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG + " onResume");
 	}
 
 	@Override
@@ -118,25 +112,32 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case MENU_CREATE_TRIP:
 			application.setAim(MobileHitchhikerApplication.TO_CREATE);
-			Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
+			Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG
 					+ " CreateTrip menu item clicked");
 			handleShowMap(application.getAim());
 			return true;
 		case MENU_FIND_TRIP:
 			application.setAim(MobileHitchhikerApplication.TO_FIND);
-			Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG
+			Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG
 					+ " FindTrip menu item clicked");
 			handleShowMap(application.getAim());
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
+	
+	
+	
+	public void showDatePickerDialog(View v) {
+	    DialogFragment newFragment = new DatePickerFragment();
+	    newFragment.show(getFragmentManager(), "datePicker");
+	}
 
 	private void handleShowMap(int aim) {
 
 		MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
-		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " handleShowMap");
-		Log.v(Constants.LOGTAG, " " + MainActivity.CLASSTAG + " Aim is : "
+		Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG + " handleShowMap");
+		Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG + " Aim is : "
 				+ application.getAim());
 
 		if (!startCheckBox.isChecked()
@@ -194,23 +195,45 @@ public class MainActivity extends Activity {
 				// FIXME pop up
 				trip = application.new Trip(
 						getAddressFromString(startLocationString),
-						getAddressFromString(endLocationString));
+						getAddressFromString(endLocationString), startLocationString, endLocationString);
 			}
 
 			application.setTrip(trip);
 
 			if (application.getAim() == MobileHitchhikerApplication.TO_CREATE) {
-				application.addTripToTripList(trip);
+				AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			    alert.setCancelable(false);
+				alert.setTitle("Please insert contact defails");
+				alert.setMessage("Email");
+
+				final EditText input = new EditText(this);
+				alert.setView(input);
+
+				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+				  Editable value = input.getText();
+				  MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
+				  application.setContact(value.toString());
+              		application.addTripToTripList(trip);
+              		Intent intent = new Intent(Config.INTENT_ACTION_SHOW_TRIP);
+              		startActivity(intent);
+              		dialog.dismiss();
+				  }
+				});
+
+				alert.show();
+						
 			} else {
 				MobileHitchhikerApplication.Trip foundTrip = application
 						.findBestTrip(trip);
 				application.setFoundTrip(foundTrip);
+				Intent intent = new Intent(Config.INTENT_ACTION_SHOW_TRIP);
+				startActivity(intent);
 			}
-
-			Intent intent = new Intent(Constants.INTENT_ACTION_SHOW_TRIP);
-			startActivity(intent);
+			
 		} catch (InvalidAddressException e) {
-			Log.d(Constants.LOGTAG, "Popup"); // FIXME
+			Log.d(Config.LOGTAG, "Popup"); // FIXME
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.alert_label)
 					.setMessage(R.string.location_not_resolved_message)
@@ -236,15 +259,15 @@ public class MainActivity extends Activity {
 		try {
 			addressList = coder.getFromLocationName(str, MAX_ADDRESSES);
 			if (addressList == null) {
-				Log.d(Constants.LOGTAG,
+				Log.d(Config.LOGTAG,
 						"############Address not correct #########");
 			}
 			address = addressList.get(0);
 
-			Log.v(Constants.LOGTAG, "lat=" + address.getLatitude() + "&long="
+			Log.v(Config.LOGTAG, "lat=" + address.getLatitude() + "&long="
 					+ address.getLongitude());
 		} catch (Exception e) {
-			Log.d(Constants.LOGTAG, "MY_ERROR : ############Address Not Found");
+			Log.d(Config.LOGTAG, "MY_ERROR : ############Address Not Found");
 			throw new InvalidAddressException(str);
 			// FIXME: pop up "address not found" and go back
 		}
@@ -261,22 +284,52 @@ public class MainActivity extends Activity {
 			addressList = coder.getFromLocation(latitude, longitude,
 					MAX_ADDRESSES);
 			if (addressList == null) {
-				Log.d(Constants.LOGTAG,
+				Log.d(Config.LOGTAG,
 						"############Address not correct #########");
 			}
 			address = addressList.get(0);
 
-			Log.v(Constants.LOGTAG, "lat=" + address.getLatitude() + "&long="
+			Log.v(Config.LOGTAG, "lat=" + address.getLatitude() + "&long="
 					+ address.getLongitude());
 		} catch (Exception e) {
-			Log.d(Constants.LOGTAG, "MY_ERROR : ############Address Not Found");
+			Log.d(Config.LOGTAG, "MY_ERROR : ############Address Not Found");
 		}
 
 		return address;
 	}
+	
+	class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+		final Calendar c = Calendar.getInstance();
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH);
+		int day = c.get(Calendar.DAY_OF_MONTH);
+
+		return new DatePickerDialog(getActivity(), this, year, month, day);
+		}
+
+		public void onDateSet(DatePicker view, int year, int month, int day) {
+			MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
+			Calendar c = Calendar.getInstance();
+			c.set(year, month, day);
+			application.setStartDate(c);
+		}
+
+		}
+
+	
+	
+	
 }
 
 class InvalidAddressException extends Exception {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	void InvaidAddressException() {
 	}
@@ -285,3 +338,4 @@ class InvalidAddressException extends Exception {
 		super(strMessage);
 	}
 }
+

@@ -6,6 +6,9 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -24,7 +27,7 @@ public class TripMap extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 
 		MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
-		Log.v(Constants.LOGTAG, " " + TripMap.CLASSTAG + " onCreate");
+		Log.v(Config.LOGTAG, " " + TripMap.CLASSTAG + " onCreate");
 
 		MobileHitchhikerApplication.Trip trip;
 
@@ -60,7 +63,7 @@ public class TripMap extends MapActivity {
 		String startAddress;
 		String endAddress;
 		
-		Log.v(Constants.LOGTAG, " " + TripMap.CLASSTAG + " displayMapWithTrip");
+		Log.v(Config.LOGTAG, " " + TripMap.CLASSTAG + " displayMapWithTrip");
 
 		if (app.getAim() == MobileHitchhikerApplication.TO_CREATE) {
 			start = app.getTrip().getStart();
@@ -68,14 +71,14 @@ public class TripMap extends MapActivity {
 		} else {
 			start = app.getFoundTrip().getStart();
 			end = app.getFoundTrip().getEnd();
-		}			
-
+		}
+		
 		startAddress = start.getAddressLine(0);
 		endAddress = end.getAddressLine(0);
 		
-		Log.v(Constants.LOGTAG, " " + TripMap.CLASSTAG + " start location is "
+		Log.v(Config.LOGTAG, " " + TripMap.CLASSTAG + " start location is "
 				+ startAddress);
-		Log.v(Constants.LOGTAG, " " + TripMap.CLASSTAG + " end location is "
+		Log.v(Config.LOGTAG, " " + TripMap.CLASSTAG + " end location is "
 				+ endAddress);
 
 		List<Overlay> mapOverlays = mapView.getOverlays();
@@ -114,6 +117,22 @@ public class TripMap extends MapActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		case R.id.menu_show_contacts:
+			MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
+			new AlertDialog.Builder(this)
+			.setTitle("Contact details")
+			.setMessage(application.getContact())
+			.setPositiveButton(
+					"Continue",
+					new android.content.DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog,
+								int which) {
+							// TODO Auto-generated method stub
+
+						}
+					}).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

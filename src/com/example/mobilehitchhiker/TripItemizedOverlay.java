@@ -47,6 +47,4 @@ public class TripItemizedOverlay extends ItemizedOverlay {
 	  dialog.show();
 	  return true;
 	}
-	
-
 }

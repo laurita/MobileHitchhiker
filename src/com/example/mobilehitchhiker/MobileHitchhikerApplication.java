@@ -1,15 +1,24 @@
 package com.example.mobilehitchhiker;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,7 +26,6 @@ import org.json.simple.parser.JSONParser;
 
 import android.app.Application;
 import android.location.Address;
-import android.location.Location;
 import android.util.Log;
 
 public class MobileHitchhikerApplication extends Application {
@@ -31,45 +39,12 @@ public class MobileHitchhikerApplication extends Application {
 	public static final int TO_CREATE = 1;
 	public static final int TO_FIND = 2;
 	public static final float MAX_DIST = 500000; // distance in meters
+	private Calendar start_date = Calendar.getInstance();
+	private String contact = "";
 
 	public MobileHitchhikerApplication() {
 		super();
 		this.trips = new ArrayList<Trip>();
-		// Add some trips to trip list for testing
-		Trip trip1 = new Trip("Brixen, Italy", "Rovereto, Italy");
-		Address trip1startAddress = new Address(Locale.ITALY);
-		Address trip1endAddress = new Address(Locale.ITALY);
-		trip1startAddress.setLatitude(46.70288030);
-		trip1startAddress.setLongitude(11.69295620);
-		trip1endAddress.setLatitude(45.85758350);
-		trip1endAddress.setLongitude(11.02945110);
-		trip1.setStart(trip1startAddress);
-		trip1.setEnd(trip1endAddress);
-		trips.add(trip1);
-
-		Trip trip2 = new Trip("Laives, Italy", "Trento, Italy");
-		Address trip2startAddress = new Address(Locale.ITALY);
-		Address trip2endAddress = new Address(Locale.ITALY);
-		trip2startAddress.setLatitude(46.42711360);
-		trip2startAddress.setLongitude(11.33729140);
-		trip2endAddress.setLatitude(46.06969240);
-		trip2endAddress.setLongitude(11.12108860);
-		trip2.setStart(trip2startAddress);
-		trip2.setEnd(trip2endAddress);
-		trips.add(trip2);
-
-		Trip trip3 = new Trip("Bolzano, Italy", "Rovereto");
-		Address trip3startAddress = new Address(Locale.ITALY);
-		Address trip3endAddress = new Address(Locale.ITALY);
-		trip3startAddress.setLatitude(46.49829530);
-		trip3startAddress.setLongitude(11.35475820);
-		trip3endAddress.setLatitude(45.85758350);
-		trip3endAddress.setLongitude(11.02945110);
-		trip3.setStart(trip3startAddress);
-		trip3.setEnd(trip3endAddress);
-		trips.add(trip3);
-
-		// locationAct = new LocationUpdateActivity();
 	}
 
 	@Override
@@ -97,7 +72,24 @@ public class MobileHitchhikerApplication extends Application {
 	public void setTrip(Trip trip) {
 		this.trip = trip;
 	}
-
+	
+	public void setStartDate(Calendar c) {
+		this.start_date = c;
+	}
+	
+	public String getStartDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.format(this.start_date.getTime());
+	}
+	
+	public void setContact(String c) {
+		this.contact = c;
+	}
+	
+	public String getContact() {
+		return this.contact;
+	}
+	
 	public Trip getFoundTrip() {
 		return this.foundTrip;
 	}
@@ -108,7 +100,7 @@ public class MobileHitchhikerApplication extends Application {
 
 	public Trip findBest(double lat, double lon) {
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/journeys?lat="+Double.toString(lat) + "&long=" + Double.toString(lon));
+		HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/trips?lat="+Double.toString(lat) + "&long=" + Double.toString(lon) + "&date=" + this.getStartDate());
 		HttpResponse response;
 
 		try {
@@ -142,7 +134,8 @@ public class MobileHitchhikerApplication extends Application {
 			tripendAddress.setLongitude((Double) o.get("end_long"));
 			trip.setStart(tripstartAddress);
 			trip.setEnd(tripendAddress);
-							
+			
+			this.setContact((String) o.get("contact"));
 			
 			instream.close();
 			
@@ -155,58 +148,50 @@ public class MobileHitchhikerApplication extends Application {
 	}
 
 	public Trip findBestTrip(Trip trip) {
-		Log.v(Constants.LOGTAG, " " + MobileHitchhikerApplication.CLASSTAG
+		Log.v(Config.LOGTAG, " " + MobileHitchhikerApplication.CLASSTAG
 				+ " findBestTrip");
 
 		Address start = trip.getStart();
-		Address end = trip.getEnd();
-
 		double startLat = start.getLatitude();
 		double startLon = start.getLongitude();
-		double endLat = end.getLatitude();
-		double endLon = end.getLongitude();
-		float minDist = MAX_DIST;
 		// Initialize foundTrip to the first one. Might cause problems later !!!
 		return findBest(startLat, startLon);
-		/*Trip foundTrip = trips.get(0);
-
-		for (int i = 0; i < trips.size(); i++) {
-
-			double startLatx = trips.get(i).getStart().getLatitude();
-			double startLonx = trips.get(i).getStart().getLongitude();
-			double endLatx = trips.get(i).getEnd().getLatitude();
-			double endLonx = trips.get(i).getEnd().getLongitude();
-			float startDistance = distance(startLat, startLon, startLatx,
-					startLonx);
-			float endDistance = distance(endLat, endLon, endLatx, endLonx);
-			float distance = startDistance + endDistance;
-			Log.v(Constants.LOGTAG, " " + MobileHitchhikerApplication.CLASSTAG
-					+ i + ": " + distance);
-			if (distance < minDist) {
-				minDist = distance;
-				foundTrip = trips.get(i);
-			}
-		}
-		return foundTrip;
-		*/
-	}
-
-	private float distance(double latA, double lonA, double latB, double lonB) {
-		Location locationA = new Location("passenger trip start");
-
-		locationA.setLatitude(latA);
-		locationA.setLongitude(lonA);
-
-		Location locationB = new Location("some trip start");
-
-		locationB.setLatitude(latB);
-		locationB.setLongitude(lonB);
-
-		float distance = locationA.distanceTo(locationB);
-		return distance;
 	}
 
 	public void addTripToTripList(Trip trip) {
+		 JSONObject obj=new JSONObject();
+		 obj.put("start_date", this.getStartDate());
+		 obj.put("contact", this.getContact());
+		 obj.put("start", this.trip.getFStart());
+		 obj.put("end", this.trip.getFEnd());
+		 obj.put("start_long", this.trip.getStart().getLongitude());
+		 obj.put("start_lat", this.trip.getStart().getLatitude());
+		 obj.put("end_long", this.trip.getEnd().getLongitude());
+		 obj.put("end_lat", this.trip.getEnd().getLatitude());
+		  
+	    DefaultHttpClient httpclient = new DefaultHttpClient();
+
+	    HttpPost httpost = new HttpPost("http://10.0.2.2:5000/trips");
+
+	    StringEntity se;
+		try {
+			se = new StringEntity(obj.toJSONString());
+			 httpost.setEntity(se);
+			 httpost.setHeader("Accept", "application/json");
+			 httpost.setHeader("Content-type", "application/json");
+
+			   
+			  ResponseHandler responseHandler = new BasicResponseHandler();
+			  httpclient.execute(httpost, responseHandler);	
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 		this.trips.add(trip);
 	}
 
@@ -215,9 +200,9 @@ public class MobileHitchhikerApplication extends Application {
 	}
 
 	public class Trip {
-		private String startLocation;
-		private String endLocation;
 		private Address start;
+		private String fstart = "";
+		private String fend = "";
 		private Address end;
 
 		public Trip(Address start, Address end) {
@@ -225,10 +210,17 @@ public class MobileHitchhikerApplication extends Application {
 			this.end = end;
 		}
 		
+		public Trip(Address start, Address end, String fstart, String fend) {
+			this.start = start;
+			this.end = end;
+			this.fstart = fstart;
+			this.fend = fend;
+		}
+		
 
 		public Trip(String start, String end) {
-			this.startLocation = start;
-			this.endLocation = end;
+			this.fstart = start;
+			this.fend = end;
 		}
 
 		@Override
@@ -251,6 +243,14 @@ public class MobileHitchhikerApplication extends Application {
 
 		public void setEnd(Address end) {
 			this.end = end;
+		}
+		
+		public String getFStart() {
+			return this.fstart;
+		}
+		
+		public String getFEnd() {
+			return this.fend;
 		}
 	}
 }

@@ -27,5 +27,7 @@
     <string name="trip_map_label">Your trip</string>
     <string name="title_activity_location_update">LocationUpdateActivity</string>
     <string name="start_here_checkbox">Start here</string>
+    <string name="pick_date">Pick date</string>
+    <string name="menu_show_contacts">Contact</string>
 
 </resources>
