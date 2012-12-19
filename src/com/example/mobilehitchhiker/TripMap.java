@@ -22,7 +22,7 @@ public class TripMap extends MapActivity {
 
 	private static final String CLASSTAG = TripMap.class.getSimpleName();
 	Geocoder gc;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -43,9 +43,7 @@ public class TripMap extends MapActivity {
 			displayMapWithTrip(trip, application, mapView);
 		}
 
-		// TODO: findBestTrip is done twice!!!
 		else if (application.getAim() == MobileHitchhikerApplication.TO_FIND) {
-			//trip = application.findBestTrip(application.getTrip());
 			trip = application.getTrip();
 			displayMapWithTrip(trip, application, mapView);
 		}
@@ -53,17 +51,11 @@ public class TripMap extends MapActivity {
 
 	public void displayMapWithTrip(MobileHitchhikerApplication.Trip trip,
 			MobileHitchhikerApplication app, MapView mapView) {
-
-		// By default the start/end locations are initialized to the trip with
-		// info that was filled in in the form
-		//String startLocation = app.getTrip().getStartLocation();
-		//String endLocation = app.getTrip().getEndLocation();
-
-		Address start = null; 
+		Address start = null;
 		Address end = null;
 		String startAddress;
 		String endAddress;
-		
+
 		Log.v(Config.LOGTAG, " " + TripMap.CLASSTAG + " displayMapWithTrip");
 
 		if (app.getAim() == MobileHitchhikerApplication.TO_CREATE) {
@@ -73,10 +65,10 @@ public class TripMap extends MapActivity {
 			start = app.getFoundTrip().getStart();
 			end = app.getFoundTrip().getEnd();
 		}
-		
+
 		startAddress = start.getAddressLine(0);
 		endAddress = end.getAddressLine(0);
-		
+
 		Log.v(Config.LOGTAG, " " + TripMap.CLASSTAG + " start location is "
 				+ startAddress);
 		Log.v(Config.LOGTAG, " " + TripMap.CLASSTAG + " end location is "
@@ -92,15 +84,15 @@ public class TripMap extends MapActivity {
 		int startLon = (int) (trip.getStart().getLongitude() * 1E6);
 
 		GeoPoint startPoint = new GeoPoint(startLat, startLon);
-		OverlayItem overlayitem = new OverlayItem(startPoint,
-				"Your trip starts here!", startAddress);
+		OverlayItem overlayitem = new OverlayItem(startPoint, trip.getFStart(),
+				startAddress);
 
 		int endLat = (int) (trip.getEnd().getLatitude() * 1E6);
 		int endLon = (int) (trip.getEnd().getLongitude() * 1E6);
 
 		GeoPoint endPoint = new GeoPoint(endLat, endLon);
-		OverlayItem overlayitem2 = new OverlayItem(endPoint,
-				"Your trip ends here!", endAddress);
+		OverlayItem overlayitem2 = new OverlayItem(endPoint, trip.getFEnd(),
+				endAddress);
 
 		itemizedoverlay.addOverlay(overlayitem);
 		itemizedoverlay.addOverlay(overlayitem2);
@@ -122,18 +114,17 @@ public class TripMap extends MapActivity {
 		case R.id.menu_show_contacts:
 			MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
 			new AlertDialog.Builder(this)
-			.setTitle("Contact details")
-			.setMessage(application.getContact())
-			.setPositiveButton(
-					"Continue",
-					new android.content.DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog,
-								int which) {
-							// TODO Auto-generated method stub
-
-						}
-					}).show();
+					.setTitle("Contact details")
+					.setMessage(application.getContact())
+					.setPositiveButton(
+							"Continue",
+							new android.content.DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// pass
+								}
+							}).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -141,7 +132,6 @@ public class TripMap extends MapActivity {
 
 	@Override
 	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
