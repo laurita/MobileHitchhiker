@@ -1,6 +1,5 @@
 package com.example.mobilehitchhiker;
 
-
 import java.util.Calendar;
 import java.util.List;
 
@@ -41,15 +40,15 @@ public class MainActivity extends Activity {
 	private Button buttonFind;
 	private CheckBox startCheckBox;
 	private MobileHitchhikerApplication.Trip trip;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		
+
 		super.onCreate(savedInstanceState);
-		
+
 		Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG + " onCreate");
 
 		setContentView(R.layout.main);
@@ -69,8 +68,8 @@ public class MainActivity extends Activity {
 				application.setAim(MobileHitchhikerApplication.TO_CREATE);
 				Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG
 						+ " CreateTrip button clicked");
-				Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG
-						+ " Aim is : " + application.getAim());
+				Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG + " Aim is : "
+						+ application.getAim());
 				handleShowMap(application.getAim());
 			}
 		});
@@ -86,7 +85,6 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-
 
 	@Override
 	protected void onResume() {
@@ -125,12 +123,10 @@ public class MainActivity extends Activity {
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
-	
-	
-	
+
 	public void showDatePickerDialog(View v) {
-	    DialogFragment newFragment = new DatePickerFragment();
-	    newFragment.show(getFragmentManager(), "datePicker");
+		DialogFragment newFragment = new DatePickerFragment();
+		newFragment.show(getFragmentManager(), "datePicker");
 	}
 
 	private void handleShowMap(int aim) {
@@ -195,7 +191,8 @@ public class MainActivity extends Activity {
 				// FIXME pop up
 				trip = application.new Trip(
 						getAddressFromString(startLocationString),
-						getAddressFromString(endLocationString), startLocationString, endLocationString);
+						getAddressFromString(endLocationString),
+						startLocationString, endLocationString);
 			}
 
 			application.setTrip(trip);
@@ -203,35 +200,55 @@ public class MainActivity extends Activity {
 			if (application.getAim() == MobileHitchhikerApplication.TO_CREATE) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-			    alert.setCancelable(false);
+				alert.setCancelable(false);
 				alert.setTitle("Please insert contact defails");
 				alert.setMessage("Email");
 
 				final EditText input = new EditText(this);
 				alert.setView(input);
 
-				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-				  Editable value = input.getText();
-				  MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
-				  application.setContact(value.toString());
-              		application.addTripToTripList(trip);
-              		Intent intent = new Intent(Config.INTENT_ACTION_SHOW_TRIP);
-              		startActivity(intent);
-              		dialog.dismiss();
-				  }
-				});
+				alert.setPositiveButton("Ok",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								Editable value = input.getText();
+								MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
+								application.setContact(value.toString());
+								application.addTripToTripList(trip);
+								Intent intent = new Intent(
+										Config.INTENT_ACTION_SHOW_TRIP);
+								startActivity(intent);
+								dialog.dismiss();
+							}
+						});
 
 				alert.show();
-						
+
 			} else {
-				MobileHitchhikerApplication.Trip foundTrip = application
-						.findBestTrip(trip);
-				application.setFoundTrip(foundTrip);
-				Intent intent = new Intent(Config.INTENT_ACTION_SHOW_TRIP);
-				startActivity(intent);
+				MobileHitchhikerApplication.Trip foundTrip;
+				try {
+					foundTrip = application.findBestTrip(trip);
+
+					application.setFoundTrip(foundTrip);
+					Intent intent = new Intent(Config.INTENT_ACTION_SHOW_TRIP);
+					startActivity(intent);
+				} catch (TripNotFoundException e) {
+					new AlertDialog.Builder(this)
+							.setTitle(R.string.alert_label)
+							.setMessage("Trip not found!")
+							.setPositiveButton(
+									"Continue",
+									new android.content.DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// TODO Auto-generated method stub
+										}
+									}).show();
+				}
 			}
-			
+
 		} catch (InvalidAddressException e) {
 			Log.d(Config.LOGTAG, "Popup"); // FIXME
 			new AlertDialog.Builder(this)
@@ -297,17 +314,18 @@ public class MainActivity extends Activity {
 
 		return address;
 	}
-	
-	class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+	class DatePickerFragment extends DialogFragment implements
+			DatePickerDialog.OnDateSetListener {
 
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-		final Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH);
-		int day = c.get(Calendar.DAY_OF_MONTH);
+			final Calendar c = Calendar.getInstance();
+			int year = c.get(Calendar.YEAR);
+			int month = c.get(Calendar.MONTH);
+			int day = c.get(Calendar.DAY_OF_MONTH);
 
-		return new DatePickerDialog(getActivity(), this, year, month, day);
+			return new DatePickerDialog(getActivity(), this, year, month, day);
 		}
 
 		public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -317,11 +335,8 @@ public class MainActivity extends Activity {
 			application.setStartDate(c);
 		}
 
-		}
+	}
 
-	
-	
-	
 }
 
 class InvalidAddressException extends Exception {
@@ -338,4 +353,3 @@ class InvalidAddressException extends Exception {
 		super(strMessage);
 	}
 }
-

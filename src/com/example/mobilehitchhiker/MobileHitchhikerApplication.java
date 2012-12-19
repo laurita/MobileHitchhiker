@@ -99,7 +99,7 @@ public class MobileHitchhikerApplication extends Application {
 	}
 
 	public Trip findBest(double start_lat, double start_lon, double end_lat,
-			double end_lon) {
+			double end_lon) throws TripNotFoundException {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/trips?start_lat="
 				+ Double.toString(start_lat) + "&start_long="
@@ -126,32 +126,37 @@ public class MobileHitchhikerApplication extends Application {
 			String result = sb.toString();
 
 			JSONArray json = (JSONArray) new JSONParser().parse(result);
-			JSONObject o = (JSONObject) json.get(0);
-			Trip trip = new Trip((String) o.get("start"), (String) o.get("end"));
+			if (json.size() == 0) {
+				throw new TripNotFoundException();
+			} else {
+				JSONObject o = (JSONObject) json.get(0);
+				Trip trip = new Trip((String) o.get("start"),
+						(String) o.get("end"));
 
-			Address tripstartAddress = new Address(Locale.ITALY);
-			Address tripendAddress = new Address(Locale.ITALY);
+				Address tripstartAddress = new Address(Locale.ITALY);
+				Address tripendAddress = new Address(Locale.ITALY);
 
-			tripstartAddress.setLatitude((Double) o.get("start_lat"));
-			tripstartAddress.setLongitude((Double) o.get("start_long"));
-			tripendAddress.setLatitude((Double) o.get("end_lat"));
-			tripendAddress.setLongitude((Double) o.get("end_long"));
-			trip.setStart(tripstartAddress);
-			trip.setEnd(tripendAddress);
+				tripstartAddress.setLatitude((Double) o.get("start_lat"));
+				tripstartAddress.setLongitude((Double) o.get("start_long"));
+				tripendAddress.setLatitude((Double) o.get("end_lat"));
+				tripendAddress.setLongitude((Double) o.get("end_long"));
+				trip.setStart(tripstartAddress);
+				trip.setEnd(tripendAddress);
 
-			this.setContact((String) o.get("contact"));
+				this.setContact((String) o.get("contact"));
 
-			instream.close();
+				instream.close();
 
-			return trip;
+				return trip;
+			}
 
 		} catch (Exception e) {
-			return new Trip("foo", "bar");
+			throw new TripNotFoundException();
 		}
 
 	}
 
-	public Trip findBestTrip(Trip trip) {
+	public Trip findBestTrip(Trip trip) throws TripNotFoundException {
 		Log.v(Config.LOGTAG, " " + MobileHitchhikerApplication.CLASSTAG
 				+ " findBestTrip");
 
@@ -256,5 +261,16 @@ public class MobileHitchhikerApplication extends Application {
 		public String getFEnd() {
 			return this.fend;
 		}
+	}
+}
+
+class TripNotFoundException extends Exception {
+	private static final long serialVersionUID = 2L;
+
+	void InvaidAddressException() {
+	}
+
+	TripNotFoundException() {
+		super();
 	}
 }
