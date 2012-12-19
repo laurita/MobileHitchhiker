@@ -101,7 +101,7 @@ public class MobileHitchhikerApplication extends Application {
 	public Trip findBest(double start_lat, double start_lon, double end_lat,
 			double end_lon) throws TripNotFoundException {
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/trips?start_lat="
+		HttpGet httpGet = new HttpGet(Config.BACKEND_URL + "/trips?start_lat="
 				+ Double.toString(start_lat) + "&start_long="
 				+ Double.toString(start_lon) + "&end_lat="
 				+ Double.toString(end_lat) + "&end_long="
@@ -183,7 +183,7 @@ public class MobileHitchhikerApplication extends Application {
 
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 
-		HttpPost httpost = new HttpPost("http://10.0.2.2:5000/trips");
+		HttpPost httpost = new HttpPost(Config.BACKEND_URL + "/trips");
 
 		StringEntity se;
 		try {
