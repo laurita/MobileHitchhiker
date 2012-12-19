@@ -44,7 +44,7 @@ public class TripMap extends MapActivity {
 		}
 
 		else if (application.getAim() == MobileHitchhikerApplication.TO_FIND) {
-			trip = application.getTrip();
+			trip = application.getFoundTrip();
 			displayMapWithTrip(trip, application, mapView);
 		}
 	}
