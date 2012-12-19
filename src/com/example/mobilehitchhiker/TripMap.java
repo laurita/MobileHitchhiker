@@ -45,7 +45,8 @@ public class TripMap extends MapActivity {
 
 		// TODO: findBestTrip is done twice!!!
 		else if (application.getAim() == MobileHitchhikerApplication.TO_FIND) {
-			trip = application.findBestTrip(application.getTrip());
+			//trip = application.findBestTrip(application.getTrip());
+			trip = application.getTrip();
 			displayMapWithTrip(trip, application, mapView);
 		}
 	}

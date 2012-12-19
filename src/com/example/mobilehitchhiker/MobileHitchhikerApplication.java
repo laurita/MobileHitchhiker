@@ -72,24 +72,24 @@ public class MobileHitchhikerApplication extends Application {
 	public void setTrip(Trip trip) {
 		this.trip = trip;
 	}
-	
+
 	public void setStartDate(Calendar c) {
 		this.start_date = c;
 	}
-	
+
 	public String getStartDate() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.format(this.start_date.getTime());
 	}
-	
+
 	public void setContact(String c) {
 		this.contact = c;
 	}
-	
+
 	public String getContact() {
 		return this.contact;
 	}
-	
+
 	public Trip getFoundTrip() {
 		return this.foundTrip;
 	}
@@ -98,9 +98,14 @@ public class MobileHitchhikerApplication extends Application {
 		this.foundTrip = trip;
 	}
 
-	public Trip findBest(double lat, double lon) {
+	public Trip findBest(double start_lat, double start_lon, double end_lat,
+			double end_lon) {
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/trips?lat="+Double.toString(lat) + "&long=" + Double.toString(lon) + "&date=" + this.getStartDate());
+		HttpGet httpGet = new HttpGet("http://10.0.2.2:5000/trips?start_lat="
+				+ Double.toString(start_lat) + "&start_long="
+				+ Double.toString(start_lon) + "&end_lat="
+				+ Double.toString(end_lat) + "&end_long="
+				+ Double.toString(end_lon) + "&date=" + this.getStartDate());
 		HttpResponse response;
 
 		try {
@@ -123,24 +128,23 @@ public class MobileHitchhikerApplication extends Application {
 			JSONArray json = (JSONArray) new JSONParser().parse(result);
 			JSONObject o = (JSONObject) json.get(0);
 			Trip trip = new Trip((String) o.get("start"), (String) o.get("end"));
-			
+
 			Address tripstartAddress = new Address(Locale.ITALY);
 			Address tripendAddress = new Address(Locale.ITALY);
-			
-		
+
 			tripstartAddress.setLatitude((Double) o.get("start_lat"));
 			tripstartAddress.setLongitude((Double) o.get("start_long"));
 			tripendAddress.setLatitude((Double) o.get("end_lat"));
 			tripendAddress.setLongitude((Double) o.get("end_long"));
 			trip.setStart(tripstartAddress);
 			trip.setEnd(tripendAddress);
-			
+
 			this.setContact((String) o.get("contact"));
-			
+
 			instream.close();
-			
+
 			return trip;
-			
+
 		} catch (Exception e) {
 			return new Trip("foo", "bar");
 		}
@@ -154,35 +158,37 @@ public class MobileHitchhikerApplication extends Application {
 		Address start = trip.getStart();
 		double startLat = start.getLatitude();
 		double startLon = start.getLongitude();
+		Address end = trip.getEnd();
+		double endLat = end.getLatitude();
+		double endLon = end.getLongitude();
 		// Initialize foundTrip to the first one. Might cause problems later !!!
-		return findBest(startLat, startLon);
+		return findBest(startLat, startLon, endLat, endLon);
 	}
 
 	public void addTripToTripList(Trip trip) {
-		 JSONObject obj=new JSONObject();
-		 obj.put("start_date", this.getStartDate());
-		 obj.put("contact", this.getContact());
-		 obj.put("start", this.trip.getFStart());
-		 obj.put("end", this.trip.getFEnd());
-		 obj.put("start_long", this.trip.getStart().getLongitude());
-		 obj.put("start_lat", this.trip.getStart().getLatitude());
-		 obj.put("end_long", this.trip.getEnd().getLongitude());
-		 obj.put("end_lat", this.trip.getEnd().getLatitude());
-		  
-	    DefaultHttpClient httpclient = new DefaultHttpClient();
+		JSONObject obj = new JSONObject();
+		obj.put("start_date", this.getStartDate());
+		obj.put("contact", this.getContact());
+		obj.put("start", this.trip.getFStart());
+		obj.put("end", this.trip.getFEnd());
+		obj.put("start_long", this.trip.getStart().getLongitude());
+		obj.put("start_lat", this.trip.getStart().getLatitude());
+		obj.put("end_long", this.trip.getEnd().getLongitude());
+		obj.put("end_lat", this.trip.getEnd().getLatitude());
 
-	    HttpPost httpost = new HttpPost("http://10.0.2.2:5000/trips");
+		DefaultHttpClient httpclient = new DefaultHttpClient();
 
-	    StringEntity se;
+		HttpPost httpost = new HttpPost("http://10.0.2.2:5000/trips");
+
+		StringEntity se;
 		try {
 			se = new StringEntity(obj.toJSONString());
-			 httpost.setEntity(se);
-			 httpost.setHeader("Accept", "application/json");
-			 httpost.setHeader("Content-type", "application/json");
+			httpost.setEntity(se);
+			httpost.setHeader("Accept", "application/json");
+			httpost.setHeader("Content-type", "application/json");
 
-			   
-			  ResponseHandler responseHandler = new BasicResponseHandler();
-			  httpclient.execute(httpost, responseHandler);	
+			ResponseHandler responseHandler = new BasicResponseHandler();
+			httpclient.execute(httpost, responseHandler);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
@@ -190,8 +196,7 @@ public class MobileHitchhikerApplication extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		this.trips.add(trip);
 	}
 
@@ -209,14 +214,13 @@ public class MobileHitchhikerApplication extends Application {
 			this.start = start;
 			this.end = end;
 		}
-		
+
 		public Trip(Address start, Address end, String fstart, String fend) {
 			this.start = start;
 			this.end = end;
 			this.fstart = fstart;
 			this.fend = fend;
 		}
-		
 
 		public Trip(String start, String end) {
 			this.fstart = start;
@@ -244,11 +248,11 @@ public class MobileHitchhikerApplication extends Application {
 		public void setEnd(Address end) {
 			this.end = end;
 		}
-		
+
 		public String getFStart() {
 			return this.fstart;
 		}
-		
+
 		public String getFEnd() {
 			return this.fend;
 		}
