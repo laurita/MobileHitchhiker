@@ -106,15 +106,13 @@ public class MainActivity extends Activity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
 		MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
-		// FIXME
-		switch (item.getItemId()) {
-		case MENU_CREATE_TRIP:
+		if (item.getItemId() == MENU_CREATE_TRIP) {
 			application.setAim(MobileHitchhikerApplication.TO_CREATE);
 			Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG
 					+ " CreateTrip menu item clicked");
 			handleShowMap(application.getAim());
 			return true;
-		case MENU_FIND_TRIP:
+		} else if (item.getItemId() == MENU_FIND_TRIP) {
 			application.setAim(MobileHitchhikerApplication.TO_FIND);
 			Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG
 					+ " FindTrip menu item clicked");
