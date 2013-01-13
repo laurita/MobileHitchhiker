@@ -146,8 +146,6 @@ public class MainActivity extends Activity {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
-
 								}
 							}).show();
 			return;
@@ -162,7 +160,6 @@ public class MainActivity extends Activity {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 								}
 							}).show();
 			return;
@@ -245,7 +242,6 @@ public class MainActivity extends Activity {
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-											// TODO Auto-generated method stub
 										}
 									}).show();
 				}
@@ -261,7 +257,6 @@ public class MainActivity extends Activity {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 								}
 							}).show();
 			return;
@@ -276,7 +271,6 @@ public class MainActivity extends Activity {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									// TODO Auto-generated method stub
 								}
 							}).show();
 			return;
