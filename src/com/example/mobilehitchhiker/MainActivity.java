@@ -177,7 +177,11 @@ public class MainActivity extends Activity {
 				if (gps.isGPSEnabled()) {
 					double latitude = gps.getLatitude();
 					double longitude = gps.getLongitude();
+					
+					Log.v("WTF", Double.toString(longitude));
+					Log.v("WTF !!!!!!!!!!!!!!", Double.toString(latitude));
 
+					
 					trip = application.new Trip(getAddressFromLocation(
 							latitude, longitude),
 							getAddressFromString(endLocationString));
@@ -248,10 +252,24 @@ public class MainActivity extends Activity {
 			}
 
 		} catch (InvalidAddressException e) {
-			Log.d(Config.LOGTAG, "Popup"); // FIXME
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.alert_label)
 					.setMessage(R.string.location_not_resolved_message)
+					.setPositiveButton(
+							"Continue",
+							new android.content.DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method stub
+								}
+							}).show();
+			return;
+		}
+		catch (InvalidGPSCoordinates e) {
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.alert_label)
+					.setMessage(R.string.invalid_coordinates)
 					.setPositiveButton(
 							"Continue",
 							new android.content.DialogInterface.OnClickListener() {
@@ -290,7 +308,7 @@ public class MainActivity extends Activity {
 		return address;
 	}
 
-	public Address getAddressFromLocation(double latitude, double longitude) {
+	public Address getAddressFromLocation(double latitude, double longitude) throws InvalidGPSCoordinates {
 		Geocoder coder = new Geocoder(this);
 		List<Address> addressList;
 		Address address = null;
@@ -308,6 +326,7 @@ public class MainActivity extends Activity {
 					+ address.getLongitude());
 		} catch (Exception e) {
 			Log.d(Config.LOGTAG, "MY_ERROR : ############Address Not Found");
+			throw new InvalidGPSCoordinates();
 		}
 
 		return address;
@@ -338,10 +357,6 @@ public class MainActivity extends Activity {
 }
 
 class InvalidAddressException extends Exception {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	void InvaidAddressException() {
@@ -351,3 +366,12 @@ class InvalidAddressException extends Exception {
 		super(strMessage);
 	}
 }
+
+class InvalidGPSCoordinates extends Exception {
+	private static final long serialVersionUID = 2L;
+
+	InvalidGPSCoordinates() {
+		super();
+	}
+}
+

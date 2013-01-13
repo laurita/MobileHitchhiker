@@ -19,8 +19,8 @@ public class LocationService extends Service implements LocationListener {
     boolean isGPSEnabled = false;
     
     Location location;
-    double latitude;
-    double longitude;
+    double latitude = 0.0;
+    double longitude = 0.0;
     
     protected LocationManager locationManager;
  

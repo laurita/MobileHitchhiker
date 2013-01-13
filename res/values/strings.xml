@@ -29,5 +29,6 @@
     <string name="start_here_checkbox">Start here</string>
     <string name="pick_date">Pick date</string>
     <string name="menu_show_contacts">Contact</string>
+    <string name="invalid_coordinates">Can not resolve current location</string>
 
 </resources>
