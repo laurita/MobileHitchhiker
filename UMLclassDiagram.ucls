@@ -1,0 +1,137 @@
+<class-diagram version="1.0.11" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="com.example.mobilehitchhiker.MainActivity" 
+    project="MobileHitchhiker" file="/MobileHitchhiker/src/com/example/mobilehitchhiker/MainActivity.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="154" y="192"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="com.example.mobilehitchhiker.TripNotFoundException" 
+    project="MobileHitchhiker" 
+    file="/MobileHitchhiker/src/com/example/mobilehitchhiker/MobileHitchhikerApplication.java" binary="false">    
+    <position height="111" width="189" x="7" y="513"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="com.example.mobilehitchhiker.TripMap" 
+    project="MobileHitchhiker" file="/MobileHitchhiker/src/com/example/mobilehitchhiker/TripMap.java" binary="false">    
+    <position height="196" width="300" x="629" y="416"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" 
+    name="com.example.mobilehitchhiker.MobileHitchhikerApplication.Trip" project="MobileHitchhiker" 
+    file="/MobileHitchhiker/src/com/example/mobilehitchhiker/MobileHitchhikerApplication.java" binary="false">    
+    <position height="-1" width="-1" x="515" y="663"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="com.example.mobilehitchhiker.Config" 
+    project="MobileHitchhiker" file="/MobileHitchhiker/src/com/example/mobilehitchhiker/Config.java" binary="false">    
+    <position height="-1" width="-1" x="124" y="712"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" 
+    name="com.example.mobilehitchhiker.MainActivity.DatePickerFragment" project="MobileHitchhiker" 
+    file="/MobileHitchhiker/src/com/example/mobilehitchhiker/MainActivity.java" binary="false">    
+    <position height="-1" width="-1" x="118" y="449"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="com.example.mobilehitchhiker.LocationService" 
+    project="MobileHitchhiker" file="/MobileHitchhiker/src/com/example/mobilehitchhiker/LocationService.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="778" y="210"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="com.example.mobilehitchhiker.InvalidAddressException" 
+    project="MobileHitchhiker" file="/MobileHitchhiker/src/com/example/mobilehitchhiker/MainActivity.java" 
+    binary="false">    
+    <position height="111" width="196" x="203" y="514"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="com.example.mobilehitchhiker.TripItemizedOverlay" 
+    project="MobileHitchhiker" file="/MobileHitchhiker/src/com/example/mobilehitchhiker/TripItemizedOverlay.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="748" y="714"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="com.example.mobilehitchhiker.MobileHitchhikerApplication" 
+    project="MobileHitchhiker" 
+    file="/MobileHitchhiker/src/com/example/mobilehitchhiker/MobileHitchhikerApplication.java" binary="false">    
+    <position height="-1" width="-1" x="472" y="243"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association id="11">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="12" name="foundTrip"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="14">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="15" name="trip"/>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="18" name="trip"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="20">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </nesting>  
+  <association id="21">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="22" name="trips"/>      
+      <multiplicity id="23" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="24">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
