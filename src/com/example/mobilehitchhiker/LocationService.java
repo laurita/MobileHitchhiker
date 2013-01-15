@@ -102,14 +102,16 @@ public class LocationService extends Service implements LocationListener {
          alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
  
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+            @Override
+			public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
             }
         });
  
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
+            @Override
+			public void onClick(DialogInterface dialog, int which) {
             dialog.cancel();
             }
         });

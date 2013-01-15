@@ -57,6 +57,7 @@ public final class R {
         public static final int find_trip=0x7f040007;
         public static final int hello_world=0x7f040003;
         public static final int intro_trip_info=0x7f040010;
+        public static final int invalid_coordinates=0x7f04001d;
         public static final int location_not_resolved_message=0x7f040016;
         public static final int menu_create_trip=0x7f040000;
         public static final int menu_find_trip=0x7f040001;

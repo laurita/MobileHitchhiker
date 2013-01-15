@@ -175,8 +175,8 @@ public class MainActivity extends Activity {
 					double latitude = gps.getLatitude();
 					double longitude = gps.getLongitude();
 					
-					Log.v("WTF", Double.toString(longitude));
-					Log.v("WTF !!!!!!!!!!!!!!", Double.toString(latitude));
+					Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG + " longitude" + Double.toString(longitude));
+					Log.v(Config.LOGTAG, " " + MainActivity.CLASSTAG + " latitude" + Double.toString(latitude));
 
 					
 					trip = application.new Trip(getAddressFromLocation(
@@ -208,6 +208,7 @@ public class MainActivity extends Activity {
 
 				alert.setPositiveButton("Ok",
 						new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
 								Editable value = input.getText();
@@ -339,6 +340,7 @@ public class MainActivity extends Activity {
 			return new DatePickerDialog(getActivity(), this, year, month, day);
 		}
 
+		@Override
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 			MobileHitchhikerApplication application = (MobileHitchhikerApplication) getApplication();
 			Calendar c = Calendar.getInstance();
